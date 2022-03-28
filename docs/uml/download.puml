@@ -1,0 +1,15 @@
+@startuml
+autonumber
+
+actor Client as user
+participant Angular as ng
+collections MinIO as minio
+participant BackendAPI as api
+database files as db
+
+activate minio
+activate api
+activate db
+
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+autonumber
+
+actor Client as user
+participant Angular as ng
+collections MinIO as minio
+participant BackendAPI as api
+database files as db
+
+activate minio
+activate api
+activate db
+
+user -> ng : Upload image
+activate ng
+ng -> minio : Sending file
+
+note right ng
+Sending image
+using s3 protocol
+end note
+
+minio --> ng : Response object id
+ng -> api : Store object id
+note right ng
+Sending as json
+end note
+
+api -> db: Store data json
+db --> api: Success stored
+
+api -> ng: Response 200
+ng -> user: Response uploaded
+
+destroy ng
+
+@enduml
