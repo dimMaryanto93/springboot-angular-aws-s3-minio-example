@@ -31,7 +31,7 @@ sequenceDiagram
     client->>backend: Upload image
     Note over client,backend: Sending via Rest API form encripted
     backend->>minio: Sending image
-    Note over backend,minio: Sending files via S2 protocol
+    Note over backend,minio: Sending files via S3 protocol
     minio-->>backend: Response object id
     backend->>postgres: Save object id
     postgres-->>backend: Object id saved!
