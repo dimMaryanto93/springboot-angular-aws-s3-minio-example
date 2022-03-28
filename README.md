@@ -23,10 +23,27 @@ sequenceDiagram
     participant backend AS Springboot
     participant minio AS MinIO S3 Storage
     participant postgres AS PostgreSQL
+
+    activate backend
+    activate minio
+    activate postgres
+
+    client->backend: Upload image
+    Note over client,backend: Sending via Rest API form encripted
+
+    
 ```
 
-2. Received / Download document
+2.Presigned image URL string to download
 
+```mermaid
+sequenceDiagram
+    autonumber
+    actor client AS Client
+    participant backend AS Springboot
+    participant minio AS MinIO S3 Storage
+    participant postgres AS PostgreSQL
+```
 
 ## Supported web browsers
 

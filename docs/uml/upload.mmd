@@ -1,0 +1,13 @@
+sequenceDiagram
+    autonumber
+    actor client AS Client
+    participant backend AS Springboot
+    participant minio AS MinIO S3 Storage
+    participant postgres AS PostgreSQL
+
+    activate backend
+    activate minio
+    activate postgres
+
+    client->backend: Upload image
+    Note over client,backend: Sending via Rest API form encripted
