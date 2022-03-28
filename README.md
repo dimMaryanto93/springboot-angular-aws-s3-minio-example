@@ -30,8 +30,12 @@ sequenceDiagram
 
     client->backend: Upload image
     Note over client,backend: Sending via Rest API form encripted
+    backend->minio: Sending image
+    Note over backend,minio: Sending files via S2 protocol
+    minio-->backend: Response object id
+    backend->postgres: Save object id
+    postgres-->backend: Object id saved!
 
-    
 ```
 
 2.Presigned image URL string to download
