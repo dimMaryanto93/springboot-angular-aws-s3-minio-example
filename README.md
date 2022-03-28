@@ -18,10 +18,11 @@ npm start
 
 ```mermaid
 sequenceDiagram
+    autonumber
     actor client AS Client
     participant backend AS Springboot
     participant minio AS MinIO S3 Storage
-    database postgres AS PostgreSQL
+    participant postgres AS PostgreSQL
 ```
 
 2. Received / Download document
