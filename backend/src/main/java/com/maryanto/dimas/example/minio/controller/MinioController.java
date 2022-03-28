@@ -5,7 +5,6 @@ import io.minio.MinioClient;
 import io.minio.errors.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,14 +16,20 @@ import java.security.NoSuchAlgorithmException;
 @RequestMapping("/api/v1/minio")
 public class MinioController {
 
-    private MinioClient minio;
+    private final MinioClient minio;
+    private final String bucketName;
 
-    public MinioController(MinioClient minio) {
+    public MinioController(MinioClient minio, String bucketName) {
         this.minio = minio;
+        this.bucketName = bucketName;
     }
 
-    @GetMapping("/check/{bucketName}/exists")
-    public ResponseEntity<?> checkBucketIsExists(@PathVariable("bucketName") String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    @GetMapping("/check/exists")
+    public ResponseEntity<?> checkBucketIsExists()
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
+            XmlParserException, InternalException {
+
         boolean exists = this.minio.bucketExists(
                 BucketExistsArgs.builder()
                         .bucket(bucketName)

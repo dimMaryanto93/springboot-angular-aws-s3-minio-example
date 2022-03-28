@@ -5,7 +5,9 @@ minio:
     url: ${MINIO_ENPOINT_URL:http://localhost}
     port: ${MINIO_ENDPOINT_PORT:9000}
     secure: ${MINIO_ENDPOINT_SECURE:false}
-    region: ${MINIO_ENDPOINT_REGION:south-asia1-a}
+  region:
+    name: ${MINIO_REGION_NAME:south-asia1-a}
+    enabled: ${MINIO_REGION_ENABLE:false}
   credential:
     access_key: ${MINIO_CRED_ACCESS_KEY:admin}
     secret_key: ${MINIO_CRED_SECRET_KEY:admin123}
