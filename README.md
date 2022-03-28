@@ -35,7 +35,7 @@ sequenceDiagram
     minio-->backend: Response object id
     backend->postgres: Save object id
     postgres-->backend: Object id saved!
-
+    backend-->client: Received object id
 ```
 
 2.Presigned image URL string to download
