@@ -11,7 +11,20 @@
 <div class="toolbar" role="banner">
   <h3>Angular upload files</h3>
 
-  <img src="/minio/example-apps/images/a4159524-573c-4320-9303-46bcbf354417.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=admin%2F20220329%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220329T062917Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=544346c65b2ac4c37517e0210e6d25daaafe844a3fbffa7c18014c6fad9c471f" alt="">
+  <form [formGroup]="form" (submit)="upload($event)">
+    <div>
+      <input (change)="onFileChanges($event)" type="file" name="file" id="file">
+    </div>
+    <div>
+      <button type="submit">Kirim</button>
+    </div>
+  </form>
+
+  <ul>
+    <li *ngFor="let image of images">
+      <img src="{{image}}" alt="" width="200px">
+    </li>
+  </ul>
 </div>
 
 <router-outlet></router-outlet>

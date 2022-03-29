@@ -91,7 +91,11 @@ public class MinioController {
             return ResponseEntity.noContent().build();
 
         String url = this.service.presignedObjectUrl(data);
-        return ResponseEntity.ok(url);
+        Map<String, Object> body = new HashMap<>();
+        body.put("url", url);
+        body.put("objectId", data.getObjectId());
+        body.put("bucket", this.service.getBucketName());
+        return ResponseEntity.ok(body);
     }
 
 

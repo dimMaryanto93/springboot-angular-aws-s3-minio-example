@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  minio: '/minio'
+  minio: '/minio',
+  upload: '/upload-server'
 };
 
 /*

@@ -67,6 +67,10 @@ public class MinioService {
         return this.minio.getPresignedObjectUrl(builder.build());
     }
 
+    public String getBucketName(){
+        return this.bucketName;
+    }
+
     public StatObjectResponse isObjectExists(String objectId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         StatObjectArgs.Builder builder = StatObjectArgs.builder()
                 .bucket(this.bucketName)

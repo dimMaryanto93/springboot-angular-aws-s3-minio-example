@@ -3,7 +3,7 @@
 Example of angular upload/download files using MinIO, you can run locally
 
 ```bash
-docker-compose --env-file .env.example up -d
+docker-compose --env-file .env up -d
 ```
 
 then run angular project
