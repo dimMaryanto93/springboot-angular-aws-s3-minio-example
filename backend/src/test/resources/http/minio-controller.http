@@ -1,8 +1,8 @@
-GET localhost:8080/api/v1/minio/check/exists
+GET {{host}}:{{port}}{{context-path}}/api/v1/minio/bucket/exists
 
 ### check bucket is exists
 
-POST localhost:8080/api/v1/minio/upload
+POST {{host}}:{{port}}{{context-path}}/api/v1/minio/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -15,4 +15,17 @@ Content-Type: application/octet-stream
 Content-Disposition: form-data; name="folder";
 Content-Type: application/x-www-form-urlencoded
 
-/images
+images
+
+### upload file
+
+POST {{host}}:{{port}}{{context-path}}/api/v1/minio/preview
+Content-Type: application/json
+
+{
+  "objectId": "images/a4159524-573c-4320-9303-46bcbf354417.jpg",
+  "duration": 1,
+  "unit": "MINUTES"
+}
+
+### presigned url from object id

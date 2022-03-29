@@ -1,10 +1,9 @@
 package com.maryanto.dimas.example.minio.service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MinioClient;
-import io.minio.ObjectWriteResponse;
-import io.minio.UploadObjectArgs;
+import com.maryanto.dimas.example.minio.model.PreviewDTO;
+import io.minio.*;
 import io.minio.errors.*;
+import io.minio.http.Method;
 import io.minio.messages.Tags;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -37,6 +36,13 @@ public class MinioService {
                 .build());
     }
 
+    public void createdBucket() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        MakeBucketArgs.Builder builder = MakeBucketArgs
+                .builder()
+                .bucket(this.bucketName);
+        this.minio.makeBucket(builder.build());
+    }
+
     public ObjectWriteResponse upload(File file, String folder)
             throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         ObjectWriteResponse response = this.minio.uploadObject(UploadObjectArgs.builder()
@@ -50,5 +56,21 @@ public class MinioService {
                         .append(FilenameUtils.getExtension(file.getName())).toString())
                 .build());
         return response;
+    }
+
+    public String presignedObjectUrl(PreviewDTO.PresignedUrlRequest value) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        GetPresignedObjectUrlArgs.Builder builder = GetPresignedObjectUrlArgs.builder()
+                .bucket(this.bucketName)
+                .object(value.getObjectId())
+                .expiry(value.getDuration(), value.getUnit())
+                .method(Method.GET);
+        return this.minio.getPresignedObjectUrl(builder.build());
+    }
+
+    public StatObjectResponse isObjectExists(String objectId) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        StatObjectArgs.Builder builder = StatObjectArgs.builder()
+                .bucket(this.bucketName)
+                .object(objectId);
+        return this.minio.statObject(builder.build());
     }
 }

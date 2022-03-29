@@ -1,13 +1,16 @@
 package com.maryanto.dimas.example.minio.controller;
 
+import com.maryanto.dimas.example.minio.model.PreviewDTO;
 import com.maryanto.dimas.example.minio.service.MinioService;
 import io.minio.ObjectWriteResponse;
+import io.minio.StatObjectResponse;
 import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,7 +41,7 @@ public class MinioController {
         this.storageLocation = storageLocation;
     }
 
-    @GetMapping("/check/exists")
+    @GetMapping("/bucket/exists")
     public ResponseEntity<?> checkBucketIsExists()
             throws ServerException, InsufficientDataException, ErrorResponseException,
             IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
@@ -80,4 +83,18 @@ public class MinioController {
         if (newFile.exists()) return ResponseEntity.ok().body(body);
         else return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/preview")
+    public ResponseEntity<?> preview(
+            @RequestBody @Validated PreviewDTO.PresignedUrlRequest data) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+
+        StatObjectResponse response = this.service.isObjectExists(data.getObjectId());
+        if (response.deleteMarker())
+            return ResponseEntity.noContent().build();
+
+        String url = this.service.presignedObjectUrl(data);
+        return ResponseEntity.ok(url);
+    }
+
+
 }

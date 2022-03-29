@@ -17,14 +17,15 @@ public class S3Config {
     private final Boolean regionEnabled;
     private final String bucketName;
 
-    public S3Config(@Value("${minio.endpoint.url}") String endpointUrl,
-                    @Value("${minio.endpoint.port}") Integer endpointPort,
-                    @Value("${minio.endpoint.secure}") Boolean endpointSecure,
-                    @Value("${minio.region.name}") String regionName,
-                    @Value("${minio.region.enabled}") Boolean regionEnabled,
-                    @Value("${minio.credential.access_key}") String accessKey,
-                    @Value("${minio.credential.secret_key}") String secretKey,
-                    @Value("${minio.bucket.name}") String bucketName) {
+    public S3Config(
+            @Value("${minio.endpoint.url}") String endpointUrl,
+            @Value("${minio.endpoint.port}") Integer endpointPort,
+            @Value("${minio.endpoint.secure}") Boolean endpointSecure,
+            @Value("${minio.region.name}") String regionName,
+            @Value("${minio.region.enabled}") Boolean regionEnabled,
+            @Value("${minio.credential.access_key}") String accessKey,
+            @Value("${minio.credential.secret_key}") String secretKey,
+            @Value("${minio.bucket.name}") String bucketName) {
         this.endpointUrl = endpointUrl;
         this.endpointPort = endpointPort;
         this.endpointSecure = endpointSecure;
@@ -44,9 +45,9 @@ public class S3Config {
     public MinioClient client() {
         MinioClient.Builder builder = MinioClient.builder()
                 .endpoint(endpointUrl, endpointPort, endpointSecure)
-                .credentials(accessKey, secretKey);
-        if (this.regionEnabled)
-            builder.region(this.regionName);
+                .credentials(accessKey, secretKey)
+                .region(this.regionName);
+
         return builder.build();
     }
 }

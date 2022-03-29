@@ -6,7 +6,7 @@ minio:
     port: ${MINIO_ENDPOINT_PORT:9000}
     secure: ${MINIO_ENDPOINT_SECURE:false}
   region:
-    name: ${MINIO_REGION_NAME:south-asia1-a}
+    name: ${MINIO_REGION_NAME:sa-east-1}
     enabled: ${MINIO_REGION_ENABLE:false}
   credential:
     access_key: ${MINIO_CRED_ACCESS_KEY:admin}
