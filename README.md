@@ -55,5 +55,5 @@ sequenceDiagram
     
     backend-->>client: Received image Presigned URL with timeout
     deactivate backend
-    client->client: Render image from Response URL
+    client->>client: Render image from Response URL
 ```
