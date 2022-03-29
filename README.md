@@ -19,22 +19,18 @@ npm start
 ```mermaid
 sequenceDiagram
     autonumber
-    actor client AS Client
+    participant client AS Client
     participant backend AS Springboot
     participant minio AS MinIO S3 Storage
-    participant postgres AS PostgreSQL
 
     activate backend
     activate minio
-    activate postgres
 
     client->>backend: Upload image
     Note over client,backend: Sending via Rest API form encripted
     backend->>minio: Sending image
     Note over backend,minio: Sending files via S3 protocol
     minio-->>backend: Response object id
-    backend->>postgres: Save object id
-    postgres-->>backend: Object id saved!
     backend-->>client: Received object id
     deactivate backend
 ```
@@ -44,8 +40,20 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    actor client AS Client
+    participant client AS Client
     participant backend AS Springboot
     participant minio AS MinIO S3 Storage
-    participant postgres AS PostgreSQL
+
+    activate backend
+    activate minio
+
+    client->>backend: Get image url by object id
+    Note over client,backend: Sending via Rest API POST request
+    backend->>minio: PresignedUrl(objectId)
+    Note over backend,minio: Get image url using presignedUrl
+    minio-->>backend: Response URL
+    
+    backend-->>client: Received image Presigned URL with timeout
+    deactivate backend
+    client->client: Render image from Response URL
 ```
