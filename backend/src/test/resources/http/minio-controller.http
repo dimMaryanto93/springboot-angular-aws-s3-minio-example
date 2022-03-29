@@ -25,7 +25,7 @@ Content-Type: application/json
 {
   "objectId": "images/a4159524-573c-4320-9303-46bcbf354417.jpg",
   "duration": 1,
-  "unit": "MINUTES"
+  "unit": "HOURS"
 }
 
 ### presigned url from object id

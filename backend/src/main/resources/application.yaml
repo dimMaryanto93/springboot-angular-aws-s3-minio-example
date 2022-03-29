@@ -23,6 +23,6 @@ spring:
       resolve-lazily: true
 storage:
   files:
-    location: ${STORAGE_FILE_LOCATION:./target}
+    location: ${STORAGE_FILE_LOCATION:./target/uploads}
 server:
   port: ${APPLICATION_PORT:8080}

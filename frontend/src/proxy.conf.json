@@ -1,0 +1,11 @@
+{
+  "/minio": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/minio": ""
+    },
+    "logLevel": "debug"
+  }
+}

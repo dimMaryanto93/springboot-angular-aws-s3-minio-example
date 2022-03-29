@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  labels:
+    app: minio
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: minio
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio
+          ports:
+            - name: api
+              containerPort: 9000
+            - name: console
+              containerPort: 9001
+          image: minio/minio
+          command: [ "server", "/data", "--console-address", ":9001" ]
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: minio-config
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: minio
