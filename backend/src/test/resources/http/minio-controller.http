@@ -1,1 +1,18 @@
 GET localhost:8080/api/v1/minio/check/exists
+
+### check bucket is exists
+
+POST localhost:8080/api/v1/minio/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="honda-cbr1000rr.jpg"
+Content-Type: application/octet-stream
+
+< ./honda-cbr1000rr.jpg
+
+--WebAppBoundary
+Content-Disposition: form-data; name="folder";
+Content-Type: application/x-www-form-urlencoded
+
+/images

@@ -1,27 +1,41 @@
 package com.maryanto.dimas.example.minio.controller;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MinioClient;
+import com.maryanto.dimas.example.minio.service.MinioService;
+import io.minio.ObjectWriteResponse;
 import io.minio.errors.*;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/minio")
+@Slf4j
 public class MinioController {
 
-    private final MinioClient minio;
-    private final String bucketName;
+    private final MinioService service;
+    private final String storageLocation;
 
-    public MinioController(MinioClient minio, String bucketName) {
-        this.minio = minio;
-        this.bucketName = bucketName;
+    public MinioController(
+            MinioService service,
+            @Value("${storage.files.location}") String storageLocation) {
+        this.service = service;
+        this.storageLocation = storageLocation;
     }
 
     @GetMapping("/check/exists")
@@ -30,13 +44,40 @@ public class MinioController {
             IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
             XmlParserException, InternalException {
 
-        boolean exists = this.minio.bucketExists(
-                BucketExistsArgs.builder()
-                        .bucket(bucketName)
-                        .build());
-        if (exists)
-            return ResponseEntity.ok().build();
-        else
-            return ResponseEntity.notFound().build();
+        boolean exists = this.service.isBucketExists();
+        if (exists) return ResponseEntity.ok().build();
+        else return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> upload(
+            @NotNull @NotEmpty @RequestParam("file") MultipartFile file,
+            @NotEmpty @RequestParam("folder") String folder) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        if (file.isEmpty()) {
+            throw new IOFileUploadException("file is can't empty", null);
+        }
+
+        String filename = file.getOriginalFilename();
+
+        File newDirectory = new File(this.storageLocation);
+        if (!newDirectory.exists()) {
+            newDirectory.mkdirs();
+        }
+
+        log.info("path: {}, filename: {}", newDirectory.getPath(), filename);
+        File newFile = new File(newDirectory, filename);
+
+        Path path = Paths.get(newDirectory.getPath(), filename);
+        file.transferTo(path);
+
+        ObjectWriteResponse response = this.service.upload(newFile, folder);
+        Map<String, Object> body = new HashMap<>();
+        body.put("objectId", response.object());
+        body.put("versionId", response.versionId());
+        body.put("bucket", response.bucket());
+        body.put("headers", response.headers().toMultimap());
+
+        if (newFile.exists()) return ResponseEntity.ok().body(body);
+        else return ResponseEntity.noContent().build();
     }
 }
