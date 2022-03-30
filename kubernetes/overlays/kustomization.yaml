@@ -3,3 +3,9 @@ kind: Kustomization
 
 resources:
   - ../base
+  - ../services/backend
+  - ../services/frontend
+
+components:
+  - ../components/minio
+  - ../components/ingress

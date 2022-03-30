@@ -39,17 +39,6 @@ public class MinioController {
         this.storageLocation = storageLocation;
     }
 
-    @GetMapping("/bucket/exists")
-    public ResponseEntity<?> checkBucketIsExists()
-            throws ServerException, InsufficientDataException, ErrorResponseException,
-            IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
-            XmlParserException, InternalException {
-
-        boolean exists = this.service.isBucketExists();
-        if (exists) return ResponseEntity.ok().build();
-        else return ResponseEntity.notFound().build();
-    }
-
     @PostMapping("/upload")
     public ResponseEntity<?> upload(
             @NotNull @NotEmpty @RequestParam("file") MultipartFile file,
@@ -97,6 +86,4 @@ public class MinioController {
         body.put("bucket", this.service.getBucketName());
         return ResponseEntity.ok(body);
     }
-
-
 }

@@ -1,7 +1,3 @@
-GET {{host}}:{{port}}{{context-path}}/api/v1/minio/bucket/exists
-
-### check bucket is exists
-
 POST {{host}}:{{port}}{{context-path}}/api/v1/minio/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
